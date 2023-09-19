@@ -1,0 +1,577 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Notes API",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/notes": {
+      "get": {
+        "tags": [
+          "Notes"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "required": true,
+            "example": 10,
+            "in": "query",
+            "schema": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "examples": {
+              "low": {
+                "summary": "Small portions",
+                "value": 10
+              },
+              "high": {
+                "summary": "Large portions",
+                "value": 20
+              }
+            },
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 25
+            }
+          },
+          {
+            "name": "authorType",
+            "description": "Is publisher alive",
+            "required": false,
+            "deprecated": true,
+            "allowEmptyValue": true,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "machine",
+                "human"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_string",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of notes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Note"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "List notes."
+      },
+      "post": {
+        "tags": [
+          "Notes"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNote"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Object created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a note."
+      }
+    },
+    "/notes/{id}": {
+      "get": {
+        "tags": [
+          "Notes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Note's detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Read full note object."
+      },
+      "patch": {
+        "tags": [
+          "Notes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update note with fields from object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Change some fields in Note."
+      }
+    },
+    "/authors": {
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Author"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authors/{name}/biography": {
+      "put": {
+        "tags": [
+          "Authors"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authors/{name}/avatar": {
+      "put": {
+        "tags": [
+          "Authors"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authors/{name}": {
+      "put": {
+        "tags": [
+          "Authors"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/mixed": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "author": {
+                    "$ref": "#/components/schemas/BaseAuthor"
+                  },
+                  "biography": {
+                    "type": "string"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stream/authors/{name}": {
+      "put": {
+        "tags": [
+          "Authors"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/mixed": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "author": {
+                    "$ref": "#/components/schemas/BaseAuthor"
+                  },
+                  "biography": {
+                    "type": "string"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create author with bit avatar file without loading it to memory."
+      }
+    },
+    "/notes/{id}/author": {
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAuthor"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated list of note's authors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Author"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Add author of note.",
+        "deprecated": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateNote": {
+        "title": "CreateNote",
+        "required": [
+          "title",
+          "owner_id"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "owner_id": {
+            "title": "Owner Id",
+            "type": "integer"
+          }
+        }
+      },
+      "AuthorType": {
+        "title": "AuthorType",
+        "enum": [
+          "machine",
+          "human"
+        ],
+        "type": "string",
+        "description": "Weather or not note was created by robot or a human being."
+      },
+      "Author": {
+        "title": "Author",
+        "required": [
+          "name",
+          "nature"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "nature": {
+            "$ref": "#/components/schemas/AuthorType"
+          },
+          "biography": {
+            "title": "Biography",
+            "type": "string"
+          },
+          "avatar": {
+            "title": "Avatar",
+            "type": "string",
+            "format": "path"
+          }
+        }
+      },
+      "Note": {
+        "title": "Note",
+        "required": [
+          "title",
+          "owner_id",
+          "id",
+          "created"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "owner_id": {
+            "title": "Owner Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "created": {
+            "title": "Created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "authors": {
+            "title": "Authors",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Author"
+            }
+          }
+        }
+      },
+      "BaseAuthor": {
+        "title": "BaseAuthor",
+        "required": [
+          "name",
+          "nature"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "nature": {
+            "$ref": "#/components/schemas/AuthorType"
+          }
+        }
+      },
+      "CreateAuthor": {
+        "title": "CreateAuthor",
+        "required": [
+          "name",
+          "nature",
+          "avatar"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "nature": {
+            "$ref": "#/components/schemas/AuthorType"
+          },
+          "biography": {
+            "title": "Biography",
+            "type": "string"
+          },
+          "avatar": {
+            "title": "Avatar",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      }
+    }
+  }
+}

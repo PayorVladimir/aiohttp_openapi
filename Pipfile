@@ -1,0 +1,25 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+aiohttp_devtools = '*'
+black = "*"
+isort = "*"
+flake8 = "*"
+flake8-print = "*"
+flake8-breakpoint = "*"
+pytest = "*"
+pytest-eradicate = "*"
+build = "*"
+
+[packages]
+aiohttp = "*"
+pydantic = "*"
+swagger-ui-py = "*"
+openapi_spec_validator = '*'
+aiohttp-openapi = {editable = true, path = "."}
+
+[requires]
+python_version = "3.8"

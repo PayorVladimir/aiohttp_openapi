@@ -1,0 +1,261 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Notes API",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/notes/count": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/notes/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Note"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNote"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Check server health",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/intro": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/hello/{name}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "name",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "default": "Unfamiliar"
+            },
+            "required": false,
+            "name": "surname",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/greet": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/aloha": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthorType": {
+        "title": "AuthorType",
+        "enum": [
+          "machine",
+          "human"
+        ],
+        "type": "string",
+        "description": "Weather or not note was created by robot or a human being."
+      },
+      "Author": {
+        "title": "Author",
+        "required": [
+          "name",
+          "nature"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "nature": {
+            "$ref": "#/components/schemas/AuthorType"
+          },
+          "biography": {
+            "title": "Biography",
+            "type": "string"
+          },
+          "avatar": {
+            "title": "Avatar",
+            "type": "string",
+            "format": "path"
+          }
+        }
+      },
+      "Note": {
+        "title": "Note",
+        "required": [
+          "title",
+          "owner_id",
+          "id",
+          "created"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "owner_id": {
+            "title": "Owner Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "created": {
+            "title": "Created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "authors": {
+            "title": "Authors",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Author"
+            }
+          }
+        }
+      },
+      "CreateNote": {
+        "title": "CreateNote",
+        "required": [
+          "title",
+          "owner_id"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "owner_id": {
+            "title": "Owner Id",
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

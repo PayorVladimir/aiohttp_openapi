@@ -1,0 +1,170 @@
+components:
+  schemas:
+    Author:
+      properties:
+        avatar:
+          format: path
+          title: Avatar
+          type: string
+        biography:
+          title: Biography
+          type: string
+        name:
+          title: Name
+          type: string
+        nature:
+          $ref: '#/components/schemas/AuthorType'
+      required:
+      - name
+      - nature
+      title: Author
+      type: object
+    AuthorType:
+      description: Weather or not note was created by robot or a human being.
+      enum:
+      - machine
+      - human
+      title: AuthorType
+      type: string
+    CreateNote:
+      properties:
+        content:
+          title: Content
+          type: string
+        owner_id:
+          title: Owner Id
+          type: integer
+        title:
+          title: Title
+          type: string
+      required:
+      - title
+      - owner_id
+      title: CreateNote
+      type: object
+    Note:
+      properties:
+        authors:
+          items:
+            $ref: '#/components/schemas/Author'
+          title: Authors
+          type: array
+        content:
+          title: Content
+          type: string
+        created:
+          format: date-time
+          title: Created
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        owner_id:
+          title: Owner Id
+          type: integer
+        title:
+          title: Title
+          type: string
+      required:
+      - title
+      - owner_id
+      - id
+      - created
+      title: Note
+      type: object
+info:
+  title: Notes API
+  version: 0.0.1
+openapi: 3.0.0
+paths:
+  /aloha:
+    get:
+      parameters: []
+      responses:
+        '204':
+          description: OK
+  /greet:
+    get:
+      parameters: []
+      responses:
+        '204':
+          description: OK
+  /health:
+    get:
+      parameters: []
+      responses:
+        '204':
+          description: OK
+      summary: Check server health
+  /hello/{name}:
+    get:
+      parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: surname
+        required: false
+        schema:
+          default: Unfamiliar
+          type: string
+      responses:
+        '204':
+          description: OK
+  /intro:
+    get:
+      parameters: []
+      responses:
+        '204':
+          description: OK
+  /notes:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Note'
+                type: array
+          description: ''
+    post:
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNote'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+  /notes/count:
+    get:
+      parameters: []
+      responses:
+        '204':
+          description: OK
+  /notes/{id}:
+    get:
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
