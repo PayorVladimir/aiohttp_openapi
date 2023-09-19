@@ -138,8 +138,10 @@ class _Query(Param):
 
     async def extract(self, request: web.Request):
         raw_value = self.Undefined
-        if self.alias.lower() in map(str.lower, request.query.keys()):
-            raw_value = request.query.get(self.alias, self.Undefined)
+        for key in request.query.keys():
+            if key.lower() == self.alias.lower():
+                raw_value = request.query.get(key, self.Undefined)
+                break
         if raw_value is self.Undefined:
             if not self.required:
                 return self.default
