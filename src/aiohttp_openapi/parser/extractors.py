@@ -137,7 +137,9 @@ class _Query(Param):
     _in_ = Locations.query
 
     async def extract(self, request: web.Request):
-        raw_value = request.query.get(self.alias, self.Undefined)
+        raw_value = self.Undefined
+        if self.alias.lower() in map(str.lower, request.query.keys()):
+            raw_value = request.query.get(self.alias, self.Undefined)
         if raw_value is self.Undefined:
             if not self.required:
                 return self.default
